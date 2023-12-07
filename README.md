@@ -19,10 +19,11 @@ This application is a note-taking system developed using Express.js and MongoDB.
 docker pull yavuzozbay/nodeserver:2.0.0
 ```
 Browser Request Flow through the K8s components
-![project display](kube/project-image/architecture-project.jpeg)
+![project display2](kube/project-image/architecture-project.jpeg)
 
 MongoDB with StatefulSets on this Project
-![project display](kube/project-image/StatefulSet-MongoDB.jpeg)
+
+![project display3](kube/project-image/StatefulSet-MongoDB.jpeg)
 
 ## Platform & Limitations
 The following virtual platform is hosted by the school to execute the project:
