@@ -107,4 +107,4 @@ sudo apt update
 kubectl create namespace nodejs-mongodb-app
 
 # Create a project folder for deployment
-mkdir ~/kube
+$ mkdir ~/kube
