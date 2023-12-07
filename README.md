@@ -12,6 +12,7 @@ The primary objectives of this project are to set up and configure a Kubernetes 
 - **Security:** Configuring a secure environment to minimize potential security risks.
 
 Project Display
+
 ![project display](kube/project-image/project-display.png)
 This application is a note-taking system developed using Express.js and MongoDB. It enables users to create and share textual notes through a web interface and has been Dockerized and the Docker image is available on [Docker Hub](https://hub.docker.com/repository/docker/yavuzozbay/nodeserver). 
 
@@ -133,3 +134,142 @@ kubectl create namespace nodejs-mongodb-app
 ```bash
 # Create a project folder for deployment
 mkdir ~/kube
+cd kube
+```
+<h3>Setup Horizontal Pod Autoscaling in kubernetes:</h3>
+
+Autoscaling is one of the great features of kubernetes allowing us to automatically horizontally scale nodes or pods depending on the demand or load on our web application, it even allows us to do vertical autoscaling in case of pods.
+
+![project image4](kube\project-image\hpa-plan.jpg)
+
+Horizontal Pod Autoscaler(HPA)?
+
+I define my deployment in server.yaml set the number of number replicas like:
+```bash
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec: 
+      containers:
+        - name: server
+          image: yavuzozbay/nodeserver:2.0.0
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: mongo-config
+                  key: MONGO_URL
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "264Mi"
+              cpu: "250m"
+```
+With the HPA resource defined we can tune up the number of replicas up and down depending on CPU usage or memory usage.
+
+```bash
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: server-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: server
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
+``` 
+The main components of the file definition for hpa are:
+
+- scaleTargetRef.name- which points to our deployment name.
+- minReplicas - minimum number of replicas running at all time.
+- maxReplicas - maximum number of replicas that HPA can scale up to. It sets the upper limit and pods cannot be scaled up more than maxReplicas number.
+- targetCPUUtilizationPercentage - this is the threshold of CPU resource usage on the pod. When the threshold is hit the HPA adds a new pod. We have set it scale if CPU usage crosses 50%.
+- targetCPUUtilizationPercentage- this is a similar threshold but for memory utilization.
+
+How HPA works?
+For hpa to work it needs to have access to metrics like CPU and memory usage of our kubernetes pod component. The metrics are supplied through metrics server which pulls the usage out of the pods. HPA can then query metrics server with the latest usage information about CPU and memory and then scale up according to the values set in our server-hpa.yaml.
+
+Installing metrics-server
+First we need to install metrics server that will query the pod for CPU and Memory usage. On minikube it can be done by :
+minikube addons enable metrics-server
+
+or for other clusters it can be installed with a kubectl deployment command.
+
+This installs a metrics-server inside the kube-system namespace and can be checked via:
+
+```bash
+kubectl get pods -n kube-system | grep metrics-server
+Output:
+metrics-server-d9b576748-rr6vb              1/1     Running     2          4h5m
+
+```
+Setting up HPA
+Lets quickly install hpa by just running:
+kubectl apply -f server-hpa.yaml
+
+This will setup the HPA resource to track server app deployment and to check if its setup just run:
+```bash
+kubectl get hpa server-hpa
+output:
+NAME             REFERENCE               TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+server-hpa   Deployment/server         <unknown>/50%       1         10        0        13s
+
+```
+Testing HPA
+
+To test if HPA actually scales the pods, lets try to put some load on our application. In the deployment  server.yaml i have also setup some default resource limits on our pods like :
+
+```bash
+        resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "264Mi"
+              cpu: "250m"
+```
+I have added a /compute to the demo nodejs application with some non-blocking nodejs code so that we can call the endpoint multiple times and it ends up simulating a more realistic load situation by doing a heavy calculation.
+
+Simulating load on the deployment pods
+```bash
+hey -c 2 -n 1 -z 5m http://<external-ip>:<port>/compute
+```
+Test Result
+initial state
+
+![project image4](kube\project-image\firstly.png)
+
+With HTTP Requests
+
+![project image4](kube\project-image\httprequest.png)
+
+finaly
+
+![project image4](kube\project-image\endepods.png)
+
+```bash
+# create project yaml files
+sudo nano mongo-config.yaml
+sudo nano mongo.yaml
+sudo nano mongo-hpa.yaml
+sudo nano server.yaml
+sudo nano server-hpa.yaml
+```
