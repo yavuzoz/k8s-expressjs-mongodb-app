@@ -5,17 +5,24 @@ Welcome to the documentation of the System Administration II course at TSBE. Thi
 
 ## Project Goals
 The primary objectives of this project are to set up and configure a Kubernetes cluster with the following key features:
-# Project Display
-![project display](C:\Users\YAVUZ\Downloads\kube\k8s-expressjs-mongodb-app\kube\project-image\Screenshot (392).png)
 
-- **Scalability:** Utilizing Kubernetes orchestration for seamless scaling.
+- **Scalability:** to setup Horizontal and V Pod Autoscaling in kubernetes.
 - **Persistent Storage:** Implementing containers with persistent storage, specifically for a MongoDB Database.
 - **Container Networking:** Establishing effective container networking with port forwarding to enable external access.
 - **Security:** Configuring a secure environment to minimize potential security risks.
 
-## Used Ports:
-- **3000:** expressjs-app
-- **27017:** MongoDB
+Project Display
+![project display](kube\project-image\project-display.png)
+This application is a note-taking system developed using Express.js and MongoDB. It enables users to create and share textual notes through a web interface and has been Dockerized and the Docker image is available on [Docker Hub](https://hub.docker.com/repository/docker/yavuzozbay/nodeserver). 
+
+```bash
+docker pull yavuzozbay/nodeserver:2.0.0
+``````
+Browser Request Flow through the K8s components
+![project display](kube\project-image\architecture-project.jpeg)
+
+MongoDB with StatefulSets on this Project
+![project display](kube\project-image\StatefulSet-MongoDB.png)
 
 ## Platform & Limitations
 The following virtual platform is hosted by the school to execute the project:
