@@ -140,7 +140,7 @@ cd kube
 
 Autoscaling is one of the great features of kubernetes allowing us to automatically horizontally scale nodes or pods depending on the demand or load on our web application, it even allows us to do vertical autoscaling in case of pods.
 
-![project image4](kube\project-image\hpa-plan.jpg)
+![project image4](kube/project-image/hpa-plan.jpg)
 
 Horizontal Pod Autoscaler(HPA)?
 
@@ -255,15 +255,15 @@ hey -c 2 -n 1 -z 5m http://<external-ip>:<port>/compute
 Test Result
 initial state
 
-![project image4](kube\project-image\firstly.png)
+![project image4](kube/project-image/firstly.png)
 
 With HTTP Requests
 
-![project image4](kube\project-image\httprequest.png)
+![project image4](kube/project-image/httprequest.png)
 
 finaly
 
-![project image4](kube\project-image\endepods.png)
+![project image4](kube/project-image/endepods.png)
 
 ```bash
 # create project yaml files
