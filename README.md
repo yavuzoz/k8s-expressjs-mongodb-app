@@ -12,17 +12,18 @@ The primary objectives of this project are to set up and configure a Kubernetes 
 - **Security:** Configuring a secure environment to minimize potential security risks.
 
 Project Display
-![project display](kube\project-image\project-display.png)
+![project display](kube/project-image/project-display.png)
 This application is a note-taking system developed using Express.js and MongoDB. It enables users to create and share textual notes through a web interface and has been Dockerized and the Docker image is available on [Docker Hub](https://hub.docker.com/repository/docker/yavuzozbay/nodeserver). 
 
 ```bash
 docker pull yavuzozbay/nodeserver:2.0.0
 ``````
+``````
 Browser Request Flow through the K8s components
-![project display](kube\project-image\architecture-project.jpeg)
+![project display](kube/project-image/architecture-project.jpeg)
 
 MongoDB with StatefulSets on this Project
-![project display](kube\project-image\StatefulSet-MongoDB.png)
+![project display](kube/project-image/StatefulSet-MongoDB.png)
 
 ## Platform & Limitations
 The following virtual platform is hosted by the school to execute the project:
