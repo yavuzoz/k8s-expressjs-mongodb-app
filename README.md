@@ -191,14 +191,42 @@ ArgoCD server Port forwarding
 ```bash
 sudo socat TCP-LISTEN:31185,fork TCP:192.168.49.2:32743
 ```
+![ArgoCD-image](kube/project-image/argocd.png)
+
+```bash
+kubectl get service
+
+kubectl get pods
+```
+
+output service:
+NAME             TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+kubernetes       ClusterIP   10.96.0.1       <none>        443/TCP        18m
+mongo            ClusterIP   10.103.129.64   <none>        27017/TCP      34s
+server-service   NodePort    10.99.192.106   <none>        80:30285/TCP   34s
+
+output pods: 
+NAME                      READY   STATUS    RESTARTS   AGE                                                                                       
+mongo-0                   1/1     Running   0          110m                                                                                      
+server-68c5768597-xspgk   1/1     Running   0          110m  
 
 ```bash
 # Start server service
 minikube service server-service
+minikube service server-service --url
+
+# server-service port forwarding
+sudo socat TCP-LISTEN:30703,fork TCP:192.168.49.2:30285
+```
+
+```bash
 # Start dashboard
 minikube dashboard
+minikube dashboard --url=true
+kubectl proxy --address='0.0.0.0' --disable-filter=true
 ```
-<h6>To send some load to the application i used hey tool </h6>
+
+<h6>To send some load(http request) to the application i used hey tool </h6>
 
 ```bash
 # for Testing HPA
