@@ -136,6 +136,29 @@ kubectl create namespace nodejs-mongodb-app
 mkdir ~/kube
 cd kube
 ```
+```bash
+# create project yaml files
+sudo nano mongo-config.yaml
+sudo nano mongo.yaml
+sudo nano mongo-hpa.yaml
+sudo nano server.yaml
+sudo nano server-hpa.yaml
+```
+```bash
+# apply project yaml files
+kubectl apply -f  mongo-config.yaml
+kubectl apply -f  mongo.yaml
+kubectl apply -f  mongo-hpa.yaml
+kubectl apply -f  server.yaml
+kubectl apply -f  server-hpa.yaml
+```
+```bash
+# Start server service
+minikube service server-service
+# Start dashboard
+minikube dashboard
+
+```
 <h3>Setup Horizontal Pod Autoscaling in kubernetes:</h3>
 
 Autoscaling is one of the great features of kubernetes allowing us to automatically horizontally scale nodes or pods depending on the demand or load on our web application, it even allows us to do vertical autoscaling in case of pods.
@@ -253,6 +276,8 @@ Simulating load on the deployment pods
 hey -c 2 -n 1 -z 5m http://<external-ip>:<port>/compute
 ```
 Test Result : 
+After we are able to sustain the load for some time the HPA comes into action and increases the pod replica count to our specified number until the load gets back to normal and then brings it down to minimum number.
+
 initial state
 
 ![project image4](kube/project-image/firstly.png)
@@ -265,11 +290,4 @@ Once the CPU load flattens down to normal the extra new pods are removed.
 
 ![project image4](kube/project-image/endepods.png)
 
-```bash
-# create project yaml files
-sudo nano mongo-config.yaml
-sudo nano mongo.yaml
-sudo nano mongo-hpa.yaml
-sudo nano server.yaml
-sudo nano server-hpa.yaml
-```
+
