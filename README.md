@@ -13,7 +13,7 @@ The primary objectives of this project are to set up and configure a Kubernetes 
 
 Project Display
 
-![project display](kube/project-image/project-display.png)
+![project display](kube/project-image/project-display1.png)
 This application is a note-taking system developed using Express.js and MongoDB. It enables users to create and share textual notes through a web interface and has been Dockerized and the Docker image is available on [Docker Hub](https://hub.docker.com/repository/docker/yavuzozbay/nodeserver). 
 
 ```bash
@@ -24,7 +24,7 @@ Browser Request Flow through the K8s components
 
 MongoDB with StatefulSets on this Project
 
-![mongoDB-architectur](https://github.com/yavuzoz/k8s-expressjs-mongodb-app/issues/1#issue-2031104672)
+![mongoDB-architectur](kube/project-image/statefulset-MongoDB.jpeg)
 
 ## Platform & Limitations
 The following virtual platform is hosted by the school to execute the project:
@@ -58,6 +58,7 @@ The vmLM1 is the Kubernetes host itself. It will act as Control Plane (Master No
 
 **Installed Software:**
 - minikube version: v1.32.0
+- Docker version 24.0.5
 
 The container network is set up in a way that only necessary communication is allowed. UFW is active and configured. Open ports to the Kubernetes Node (vmLM1):
 
@@ -77,6 +78,8 @@ As far as the container network goes, only pods that need external access are co
 sudo apt update -y
 sudo apt upgrade -y
 ```
+<h5>vmLM1</h5>
+
 ```bash
 # Port forward , Enable & open necessary ports on the server firewall
 sudo ufw allow 22/tcp
@@ -84,7 +87,7 @@ sudo ufw allow 443/tcp
 sudo ufw allow 80
 sudo ufw allow 8001 # for minikube dashboard
 sudo ufw allow 30703 # for express-mongodb-app
-sudo ufw allow 31185 # for argocd (optional)
+sudo ufw allow 31185 # for ArgoCD (optional)
 sudo ufw enable
 ```
 <h5>Enable SSH Access</h5>
@@ -129,7 +132,7 @@ sudo apt update
 ```
 ```bash
 # Create a namespace for the app
-kubectl create namespace nodejs-mongodb-app
+kubectl create namespace expressjs-mongodb-app
 ```
 ```bash
 # Create a project folder for deployment
@@ -152,14 +155,56 @@ kubectl apply -f  mongo-hpa.yaml
 kubectl apply -f  server.yaml
 kubectl apply -f  server-hpa.yaml
 ```
+or Easy to Apply, you can automaticly with ArgoCD tool all yaml files to apply (optional)
+
+```bash
+# create argocd
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
+Argocd server LoadBalancer to etxternal service
+```bash
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+
+```
+
+Argocd server NodePort to etxernal service
+```bash
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}'
+
+```
+
+ArgoCD password to take( username : admin)
+```bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+
+```
+ArgoCD  services list
+
+```bash
+kubectl get services -n argocd
+```
+output:
+argocd-server                             LoadBalancer   10.105.157.43    <pending>     80:32033/TCP,443:32743/TCP 
+ArgoCD server Port forwarding
+
+```bash
+sudo socat TCP-LISTEN:31185,fork TCP:192.168.49.2:32743
+```
 
 ```bash
 # Start server service
 minikube service server-service
 # Start dashboard
 minikube dashboard
-
 ```
+<h6>To send some load to the application i used hey tool </h6>
+
+```bash
+# for Testing HPA
+sudo apt install hey
+```
+
 <h3>Setup Horizontal Pod Autoscaling in kubernetes:</h3>
 
 Autoscaling is one of the great features of kubernetes allowing us to automatically horizontally scale nodes or pods depending on the demand or load on our web application, it even allows us to do vertical autoscaling in case of pods.
@@ -243,7 +288,6 @@ This installs a metrics-server inside the kube-system namespace and can be check
 kubectl get pods -n kube-system | grep metrics-server
 Output:
 metrics-server-d9b576748-rr6vb              1/1     Running     2          4h5m
-
 ```
 Setting up HPA
 Lets quickly install hpa by just running:
@@ -252,9 +296,8 @@ kubectl apply -f server-hpa.yaml
 This will setup the HPA resource to track server app deployment and to check if its setup just run:
 ```bash
 kubectl get hpa server-hpa
-output:
-NAME             REFERENCE               TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
-server-hpa   Deployment/server         <unknown>/50%       1         10        0        13s
+NAME         REFERENCE           TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+server-hpa   Deployment/server   1%/50%    1         10        1          49m
 
 ```
 Testing HPA
@@ -274,7 +317,7 @@ I have added a /compute to the demo nodejs application with some non-blocking no
 
 Simulating load on the deployment pods
 ```bash
-hey -c 2 -n 1 -z 5m http://<external-ip>:<port>/compute
+hey -c 2 -n 1 -z 5m http://192.168.49.2:30285/compute
 ```
 Test Result : 
 After we are able to sustain the load for some time the HPA comes into action and increases the pod replica count to our specified number until the load gets back to normal and then brings it down to minimum number.
