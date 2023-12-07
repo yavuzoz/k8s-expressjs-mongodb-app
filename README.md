@@ -24,7 +24,7 @@ Browser Request Flow through the K8s components
 
 MongoDB with StatefulSets on this Project
 
-![project display3](https://github.com/yavuzoz/k8s-expressjs-mongodb-app/issues/2#issue-2030850097)
+![mongoDB-architectur](https://github.com/yavuzoz/k8s-expressjs-mongodb-app/issues/1#issue-2031104672)
 
 ## Platform & Limitations
 The following virtual platform is hosted by the school to execute the project:
