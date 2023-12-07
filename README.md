@@ -152,6 +152,7 @@ kubectl apply -f  mongo-hpa.yaml
 kubectl apply -f  server.yaml
 kubectl apply -f  server-hpa.yaml
 ```
+
 ```bash
 # Start server service
 minikube service server-service
