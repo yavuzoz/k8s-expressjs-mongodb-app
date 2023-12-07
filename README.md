@@ -22,7 +22,7 @@ Browser Request Flow through the K8s components
 ![project display](kube/project-image/architecture-project.jpeg)
 
 MongoDB with StatefulSets on this Project
-![project display](kube/project-image/StatefulSet-MongoDB.png)
+![project display](kube/project-image/StatefulSet-MongoDB.jpeg)
 
 ## Platform & Limitations
 The following virtual platform is hosted by the school to execute the project:
