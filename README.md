@@ -252,7 +252,7 @@ Simulating load on the deployment pods
 ```bash
 hey -c 2 -n 1 -z 5m http://<external-ip>:<port>/compute
 ```
-Test Result
+Test Result : 
 initial state
 
 ![project image4](kube/project-image/firstly.png)
@@ -261,7 +261,7 @@ With HTTP Requests
 
 ![project image4](kube/project-image/httprequest.png)
 
-finaly
+Once the CPU load flattens down to normal the extra new pods are removed.
 
 ![project image4](kube/project-image/endepods.png)
 
