@@ -65,7 +65,8 @@ As far as the container network goes, only pods that need external access are co
 # Update the System
 sudo apt update -y
 sudo apt upgrade -y
-
+```
+```bash
 # Port forward , Enable & open necessary ports on the server firewall
 sudo ufw allow 22/tcp
 sudo ufw allow 443/tcp
@@ -74,42 +75,51 @@ sudo ufw allow 8001 # for minikube dashboard
 sudo ufw allow 30703 # for express-mongodb-app
 sudo ufw allow 31185 # for argocd (optional)
 sudo ufw enable
-
+```
 # Enable SSH access by uncommenting the following line in /etc/ssh/sshd_config
 Port 22
 
+```bash
 # Restart sshd
 sudo systemctl restart sshd
-
+```
+```bash
 # Update the System
 sudo apt update -y
 sudo apt upgrade -y
-
+```
+```bash
 # Install Docker
 sudo apt install docker.io
 docker --version # Check Docker version
-
+```
+```bash
 # Download Minikube
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
 minikube version # Check Minikube version
-
+```
+```bash
 # Install Kubectl
 sudo snap install kubectl --classic
 kubectl version # Check Kubectl version
-
+```
+```bash
 # Start Minikube with Docker driver
 minikube start --driver=docker
 sudo usermod -aG docker $USER && newgrp docker
 minikube node add —worker
 kubectl label node <node_name> node-role.kubernetes.io/worker=worker
 kubectl get nodes
-
+```
+```bash
 # Update local apt cache
 sudo apt update
-
+```
+```bash
 # Create a namespace for the app
 kubectl create namespace nodejs-mongodb-app
-
+```
+```bash
 # Create a project folder for deployment
 mkdir ~/kube
