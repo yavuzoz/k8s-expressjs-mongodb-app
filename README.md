@@ -6,7 +6,7 @@ Welcome to the documentation of the System Administration II course at TSBE. Thi
 ## Project Goals
 The primary objectives of this project are to set up and configure a Kubernetes cluster with the following key features:
 
-- **Scalability:** to setup Horizontal and V Pod Autoscaling in kubernetes.
+- **Scalability:** to setup Horizontal and Vertical Pod Autoscaling in kubernetes.
 - **Persistent Storage:** Implementing containers with persistent storage, specifically for a MongoDB Database.
 - **Container Networking:** Establishing effective container networking with port forwarding to enable external access.
 - **Security:** Configuring a secure environment to minimize potential security risks.
@@ -343,10 +343,6 @@ To test if HPA actually scales the pods, lets try to put some load on our applic
 ```
 I have added a /compute to the demo nodejs application with some non-blocking nodejs code so that we can call the endpoint multiple times and it ends up simulating a more realistic load situation by doing a heavy calculation.
 
-Simulating load on the deployment pods
-```bash
-hey -c 2 -n 1 -z 5m http://192.168.49.2:30285/compute
-```
 Test Result : 
 After we are able to sustain the load for some time the HPA comes into action and increases the pod replica count to our specified number until the load gets back to normal and then brings it down to minimum number.
 
@@ -355,6 +351,10 @@ initial state
 ![project image4](kube/project-image/firstly.png)
 
 With HTTP Requests
+Simulating load on the deployment pods
+```bash
+hey -c 2 -n 1 -z 5m http://192.168.49.2:30285/compute
+```
 
 ![project image4](kube/project-image/httprequest.png)
 
@@ -362,4 +362,10 @@ Once the CPU load flattens down to normal the extra new pods are removed.
 
 ![project image4](kube/project-image/endepods.png)
 
+
+Happy Coding! 🚀
+
+Thank you for exploring our Kubernetes project. We hope you find it insightful and useful. If you have any questions, feedback, or ideas for improvement, feel free to reach out. Remember: "Legends never die, they just update !" 
+
+Happy coding, and may your Kubernetes journey be smooth and successful!
 
