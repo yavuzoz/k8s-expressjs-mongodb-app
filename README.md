@@ -17,8 +17,7 @@ This application is a note-taking system developed using Express.js and MongoDB.
 
 ```bash
 docker pull yavuzozbay/nodeserver:2.0.0
-``````
-``````
+```
 Browser Request Flow through the K8s components
 ![project display](kube/project-image/architecture-project.jpeg)
 
