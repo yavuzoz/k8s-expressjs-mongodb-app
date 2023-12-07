@@ -5,6 +5,8 @@ Welcome to the documentation of the System Administration II course at TSBE. Thi
 
 ## Project Goals
 The primary objectives of this project are to set up and configure a Kubernetes cluster with the following key features:
+# Project Display
+![project display](C:\Users\YAVUZ\Downloads\kube\k8s-expressjs-mongodb-app\kube\project-image\Screenshot (392).png)
 
 - **Scalability:** Utilizing Kubernetes orchestration for seamless scaling.
 - **Persistent Storage:** Implementing containers with persistent storage, specifically for a MongoDB Database.
@@ -18,7 +20,7 @@ The primary objectives of this project are to set up and configure a Kubernetes 
 ## Platform & Limitations
 The following virtual platform is hosted by the school to execute the project:
 
-### vmKL1
+<h5>vmKL1</h5>
 The vmKL1 is the management machine used to set up, administer, and access the Kubernetes cluster.
 
 **VM Specs:**
@@ -31,9 +33,9 @@ The vmKL1 is the management machine used to set up, administer, and access the K
 - IP: 192.168.110.70
 
 **Installed Software:**
-- vscode
+- vscode 
 
-### vmLM1
+<h5>vmLM1</h5>
 The vmLM1 is the Kubernetes host itself. It will act as Control Plane (Master Node) & Data Plane (Worker Node).
 
 **VM Specs:**
@@ -58,8 +60,8 @@ The container network is set up in a way that only necessary communication is al
 
 As far as the container network goes, only pods that need external access are configured with NodePort. All other pods are configured with Cluster IP for Kubernetes internal-only communication.
 
-## Manual Setup Guide
-### vmKL1:
+<h5>Manual Setup Guide</h5>
+<h5>vmKL1</h5>
 
 ```bash
 # Update the System
@@ -76,7 +78,7 @@ sudo ufw allow 30703 # for express-mongodb-app
 sudo ufw allow 31185 # for argocd (optional)
 sudo ufw enable
 ```
-# Enable SSH access by uncommenting the following line in /etc/ssh/sshd_config
+<h5>Enable SSH Access</h5>
 Port 22
 
 ```bash
