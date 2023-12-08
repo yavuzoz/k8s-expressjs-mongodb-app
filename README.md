@@ -143,7 +143,6 @@ cd kube
 # create project yaml files
 sudo nano mongo-config.yaml
 sudo nano mongo.yaml
-sudo nano mongo-hpa.yaml
 sudo nano server.yaml
 sudo nano server-hpa.yaml
 ```
@@ -151,7 +150,6 @@ sudo nano server-hpa.yaml
 # apply project yaml files
 kubectl apply -f  mongo-config.yaml
 kubectl apply -f  mongo.yaml
-kubectl apply -f  mongo-hpa.yaml
 kubectl apply -f  server.yaml
 kubectl apply -f  server-hpa.yaml
 ```
