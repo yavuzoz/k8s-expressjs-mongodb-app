@@ -9,14 +9,16 @@ The primary objectives of this project are to set up and configure a Kubernetes 
 - **Container Networking:** Establishing effective container networking with port forwarding to enable external access.
 - **Security:** Configuring a secure environment to minimize potential security risks.
 
-Project Display
+---------------------------------------------------------------------------------------
+
+#### Project Display
 ![project display](kube/project-image/project-display1.png)
 This application is a note-taking system developed using Express.js and MongoDB. It enables users to create and share textual notes through a web interface and has been Dockerized and the Docker image is available on [Docker Hub](https://hub.docker.com/repository/docker/yavuzozbay/nodeserver). 
 
 ```bash
 docker pull yavuzozbay/nodeserver:2.0.0
 ```
-Browser Request Flow through the K8s components
+#### Browser Request Flow through the K8s components
 ![project display2](kube/project-image/architecture-project.jpeg)
 
 MongoDB with StatefulSets on this Project
@@ -153,43 +155,46 @@ kubectl apply -f  mongo-hpa.yaml
 kubectl apply -f  server.yaml
 kubectl apply -f  server-hpa.yaml
 ```
-or Easy to Apply, you can automaticly with ArgoCD tool all yaml files to apply (optional)
+##### Easy to Apply, you can automaticly with ArgoCD tool all yaml files to apply (optional)
 
 ```bash
 # create argocd
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
-Argocd server LoadBalancer to etxternal service
+- Argocd server LoadBalancer to etxternal service
 ```bash
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 
 ```
 
-Argocd server NodePort to etxernal service
+- Argocd server NodePort to etxernal service
 ```bash
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}'
 
 ```
 
-ArgoCD password to take( username : admin)
+- ArgoCD password to take( username : admin)
 ```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 
 ```
-ArgoCD  services list
+- ArgoCD  services list
 
 ```bash
 kubectl get services -n argocd
 ```
 output:
-argocd-server                             LoadBalancer   10.105.157.43    <pending>     80:32033/TCP,443:32743/TCP 
-ArgoCD server Port forwarding
+ argocd-server                             LoadBalancer   10.105.157.43    <pending>     80:32033/TCP,443:32743/TCP 
+
+- ArgoCD server Port forwarding
 
 ```bash
 sudo socat TCP-LISTEN:31185,fork TCP:192.168.49.2:32743
 ```
 ![ArgoCD-image](kube/project-image/argocd.png)
+
+### Programm on the Browser to open
 
 ```bash
 kubectl get service
@@ -224,20 +229,20 @@ minikube dashboard --url=true
 kubectl proxy --address='0.0.0.0' --disable-filter=true
 ```
 
-<h6>To send some load(http request) to the application i used hey tool </h6>
+To send some load(http request) to the application i used hey tool 
 
 ```bash
 # for Testing HPA
 sudo apt install hey
 ```
 
-<h3>Setup Horizontal Pod Autoscaling in kubernetes:</h3>
+## Setup Horizontal Pod Autoscaling in kubernetes:
 
 Autoscaling is one of the great features of kubernetes allowing us to automatically horizontally scale nodes or pods depending on the demand or load on our web application, it even allows us to do vertical autoscaling in case of pods.
 
 ![project image4](kube/project-image/hpa-plan.jpg)
 
-Horizontal Pod Autoscaler(HPA)?
+### Horizontal Pod Autoscaler(HPA)?
 
 I define my deployment in server.yaml set the number of number replicas like:
 ```bash
@@ -315,7 +320,7 @@ kubectl get pods -n kube-system | grep metrics-server
 Output:
 metrics-server-d9b576748-rr6vb              1/1     Running     2          4h5m
 ```
-Setting up HPA
+#### Setting up HPA
 Lets quickly install hpa by just running:
 kubectl apply -f server-hpa.yaml
 
@@ -326,7 +331,7 @@ NAME         REFERENCE           TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
 server-hpa   Deployment/server   1%/50%    1         10        1          49m
 
 ```
-Testing HPA
+#### Testing HPA
 
 To test if HPA actually scales the pods, lets try to put some load on our application. In the deployment  server.yaml i have also setup some default resource limits on our pods like :
 
