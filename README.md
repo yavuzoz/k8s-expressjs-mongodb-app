@@ -1,8 +1,6 @@
 # SA II Project: Building and Scaling expressjs-mongodb-app on Kubernetes
-
 ## Project Overview
 Welcome to the documentation of the System Administration II course at TSBE. This project focuses on the installation and scaling of the expressjs-mongodb-app on a Kubernetes cluster.
-
 ## Project Goals
 The primary objectives of this project are to set up and configure a Kubernetes cluster with the following key features:
 
@@ -12,7 +10,6 @@ The primary objectives of this project are to set up and configure a Kubernetes 
 - **Security:** Configuring a secure environment to minimize potential security risks.
 
 Project Display
-
 ![project display](kube/project-image/project-display1.png)
 This application is a note-taking system developed using Express.js and MongoDB. It enables users to create and share textual notes through a web interface and has been Dockerized and the Docker image is available on [Docker Hub](https://hub.docker.com/repository/docker/yavuzozbay/nodeserver). 
 
@@ -25,6 +22,7 @@ Browser Request Flow through the K8s components
 MongoDB with StatefulSets on this Project
 
 ![mongoDB-architectur](kube/project-image/statefulset-MongoDB.jpeg)
+
 
 ## Platform & Limitations
 The following virtual platform is hosted by the school to execute the project:
@@ -362,10 +360,9 @@ Once the CPU load flattens down to normal the extra new pods are removed.
 
 ![project image4](kube/project-image/endepods.png)
 
-
 Happy Coding! 🚀
 
-Thank you for exploring our Kubernetes project. We hope you find it insightful and useful. If you have any questions, feedback, or ideas for improvement, feel free to reach out. Remember: "Legends never die, they just update !" 
+"Legends never die, they just update !" 
 
 Happy coding, and may your Kubernetes journey be smooth and successful!
 
